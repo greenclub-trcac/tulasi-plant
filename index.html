@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tulasi Plant — Green Club</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #041018;
+      --card: #07232b;
+      --accent: #901904;
+      --muted: #a3bcbc;
+      --text: #eaf7f3;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: 'Poppins', system-ui, Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #01121a 0%, #042a30 100%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 760px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.6);
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .logo {
+      width: 85px;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .plant-header {
+      flex: 1;
+      text-align: center;
+    }
+
+    .plant-title {
+      font-size: 30px;
+      font-weight: 700;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+      color: #fff;
+    }
+
+    .meta {
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .sidebar {
+      background: rgba(255,255,255,0.04);
+      padding: 20px;
+      border-radius: 14px;
+      margin-top: 24px;
+    }
+
+    .species {
+      font-size: 17px;
+      color: var(--muted);
+      margin-bottom: 10px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .plant-img {
+      width: 100%;
+      max-width: 300px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin: 10px auto 20px;
+      display: block;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .desc {
+      font-size: 16px;
+      line-height: 1.7;
+      color: #e8f7f0;
+      white-space: pre-line;
+      text-align: justify;
+      margin-bottom: 20px;
+    }
+
+    .qr-sample {
+      margin-top: 16px;
+      background: rgba(255,255,255,0.05);
+      padding: 10px;
+      border-radius: 10px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 13px;
+      word-wrap: break-word;
+    }
+
+    #enableAudioBtn {
+      display: none;
+      margin: 10px auto 20px;
+      padding: 20px 60px;
+      border-radius: 8px;
+      border: none;
+      background: var(--accent);
+      color: #c0c0c0;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    #enableAudioBtn:hover {
+      background: #ff5f6d;
+    }
+
+    footer {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 15px;
+      text-align: center;
+      padding: 10px;
+      width: 100%;
+    }
+
+    /* Responsive tweaks */
+    @media (max-width: 600px) {
+      body { padding: 10px; }
+      .container { padding: 18px; }
+      .logo { width: 70px; }
+      .plant-title { font-size: 24px; }
+      .desc { font-size: 14px; }
+      footer { font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container" id="app">
+    <header>
+      <a href="http://trcac.org.in/">
+      <img src="assets/Trcaclogo.png" alt="Left Logo" class="logo"></a>
+      <div class="plant-header">
+        <div class="plant-title" id="plantName">Plant</div>
+        <div class="meta" id="plantLatin"></div>
+      </div>
+      <img src="assets/Green_club.jpg" alt="Right Logo" class="logo">
+    </header>
+
+    <aside class="sidebar">
+      <div class="species" id="speciesLine">Loading plant...</div>
+      <div id="plantImageContainer"></div>
+
+      <!-- Enable Audio Button -->
+      <button id="enableAudioBtn">🔊 Enable Audio</button>
+
+      <div class="desc" id="desc">Description will appear here.</div>
+
+      <audio id="audio" preload="metadata"></audio>
+
+      <div class="qr-sample small">
+        QR opened: <span id="openedUrl"></span>
+      </div>
+    </aside>
+
+    <div style="margin-top:14px;color:var(--muted);font-size:13px;text-align:center">
+      Tip: Audio will auto-play shortly.
+    </div>
+  </div>
+
+  <footer>
+    Developed and Managed by <strong>DevClub TRCAC</strong>
+  </footer>
+
+  <script>
+    const PLANTS = {
+      tulasi: {
+        title: 'Tulasi Plant',
+        latin: 'Ocimum sanctum',
+        image: 'assets/tulasi.jpg',
+        desc: `
+Tulasi, also known as Holy Basil, is a revered plant in Hinduism and has significant medicinal value. It is known for its aromatic leaves and healing properties.
+
+🌿 Estimated Oxygen Release Rate:
+Tulasi plants are excellent air purifiers, releasing oxygen throughout the day, improving air quality.
+
+🌍 Carbon Sequestration Rate:
+A healthy Tulasi plant can absorb around 0.1–0.2 kg of CO2 per year.
+
+✨ Attractive & Interesting Uses:
+
+1️⃣ Medicinal Herb:
+Tulasi has been used in traditional medicine for centuries. It has anti-inflammatory, anti-bacterial, and anti-fungal properties. It helps to reduce stress and boost immunity.
+
+2️⃣ Sacred Plant:
+Tulasi is considered a sacred plant in Hinduism and is often grown in temples and homes for worship. It is believed to have spiritual benefits.
+
+🌸 Fun Fact:
+Tulasi leaves are considered a symbol of purity and are used in various religious rituals and offerings.
+        `,
+        audio: 'assets/tulasi.mp3'
+      }
+    };
+
+    function getParam(name) {
+      const url = new URL(location.href);
+      return url.searchParams.get(name);
+    }
+
+    const id = getParam('id') || 'tulasi';
+    const plant = PLANTS[id];
+    const openedUrlSpan = document.getElementById('openedUrl');
+    openedUrlSpan.textContent = location.href;
+
+    if (!plant) {
+      document.getElementById('plantName').textContent = 'Plant not found';
+      document.getElementById('desc').textContent = 'No data for id: ' + id;
+      throw new Error('Plant data missing for id: ' + id);
+    }
+
+    // Fill content
+    document.getElementById('plantName').textContent = plant.title;
+    document.getElementById('plantLatin').textContent = plant.latin || '';
+    document.getElementById('speciesLine').textContent = (plant.latin ? plant.title + ' — ' + plant.latin : plant.title);
+
+    // Add plant image
+    if (plant.image) {
+      const img = document.createElement('img');
+      img.src = plant.image;
+      img.alt = plant.title;
+      img.className = 'plant-img';
+      document.getElementById('plantImageContainer').appendChild(img);
+    }
+
+    // Add description
+    document.getElementById('desc').textContent = plant.desc || '';
+
+    // ---- Audio logic ----
+    const audio = document.getElementById('audio');
+    audio.src = plant.audio;
+    audio.crossOrigin = 'anonymous';
+    audio.volume = 1;
+
+    function tryPlay() {
+      audio.muted = true;
+      audio.play().then(() => {
+        // success muted → unmute after a sec
+        setTimeout(() => { audio.muted = false; }, 1);
+      }).catch(() => {
+        // Show the enable audio button
+        const btn = document.getElementById('enableAudioBtn');
+        btn.style.display = 'block';
+
+        btn.addEventListener('click', () => {
+          audio.muted = false;
+          audio.play();
+          btn.style.display = 'none'; // hide button after playing
+        }, { once: true });
+      });
+    }
+
+    window.addEventListener('load', () => {
+      setTimeout(tryPlay, 2000);
+    });
+  </script>
+
+</body>
+</html>
